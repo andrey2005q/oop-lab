@@ -1,0 +1,70 @@
+#include <iostream>
+#include <cmath>
+#include <vector>
+using namespace std;
+
+double calculateFunction(double a, double b, double x) {
+    return pow(a + x - b, 1.0 / 5.0) / (1.6 * pow(cos(3.2 * a * x), 3));
+}
+
+double calculateSum(const vector<double>& values) {
+    double sum = 0;
+    for (double value : values) {
+        sum += value;
+    }
+    return sum;
+}
+
+double calculateProduct(const vector<double>& values) {
+    double product = 1;
+    for (double value : values) {
+        product *= value;
+    }
+    return product;
+}
+
+double calculateArithmeticMean(const vector<double>& values) {
+    return calculateSum(values) / values.size();
+}
+
+double calculateGeometricMean(const vector<double>& values) {
+    double product = 1;
+    int count = 0;
+    for (double value : values) {
+        if (value > 0) {
+            product *= value;
+            count++;
+        }
+    }
+    return count > 0 ? pow(product, 1.0 / count) : 0;
+}
+
+int main() {
+    double a, b, x_start, x_end, step;
+    vector<double> results;
+
+    cout << "Enter a: ";
+    cin >> a;
+    cout << "Enter b: ";
+    cin >> b;
+    cout << "Enter start value of x: ";
+    cin >> x_start;
+    cout << "Enter end value of x: ";
+    cin >> x_end;
+    cout << "Enter step: ";
+    cin >> step;
+
+    for (double x = x_start; x <= x_end; x += step) {
+        double y = calculateFunction(a, b, x);
+        results.push_back(y);
+        cout << "x: " << x << ", y: " << y << endl;
+    }
+
+    cout << "Sum: " << calculateSum(results) << endl;
+    cout << "Product: " << calculateProduct(results) << endl;
+    cout << "Arithmetic Mean: " << calculateArithmeticMean(results) << endl;
+    cout << "Geometric Mean (positive values): " << calculateGeometricMean(results) << endl;
+
+    return 0;
+}
+
