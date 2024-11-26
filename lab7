@@ -1,0 +1,87 @@
+#include <iostream>
+#include <array>
+#include <string>
+using namespace std;
+
+struct student_s_t {
+    int id;
+    string name;
+    int course;
+};
+
+class Student {
+private:
+    static const size_t SIZE = 5;
+    array<student_s_t, SIZE> students;
+    size_t count;
+
+public:
+    Student() : count(0) {
+        cout << "Конструктор викликано." << endl;
+    }
+
+    ~Student() {
+        cout << "Деструктор викликано." << endl;
+    }
+
+    void addStudent(int id, const string& name, int course) {
+        if (count >= SIZE) {
+            cout << "Масив заповнено. Неможливо додати більше студентів." << endl;
+            return;
+        }
+        if (course <= 0 || course > 6) {
+            cout << "Некоректний курс." << endl;
+            return;
+        }
+        students[count++] = {id, name, course};
+    }
+
+    void displayAll() const {
+        if (count == 0) {
+            cout << "Список студентів порожній." << endl;
+            return;
+        }
+        for (size_t i = 0; i < count; ++i) {
+            cout << "5050: " << students[i].id
+                 << ", Віктор " << students[i].name
+                 << ", 2 " << students[i].course << endl;
+        }
+    }
+
+    void updateStudent(int id, const string& name, int course) {
+        for (size_t i = 0; i < count; ++i) {
+            if (students[i].id == id) {
+                if (course <= 0 || course > 6) {
+                    cout << "Некоректний курс." << endl;
+                    return;
+                }
+                students[i].name = name;
+                students[i].course = course;
+                return;
+            }
+        }
+        cout << "Студента з таким ID не знайдено." << endl;
+    }
+};
+
+int main() {
+    Student group;
+
+    group.addStudent(1, "Іван Іванов", 1);
+    group.addStudent(2, "Марія Петрівна", 3);
+    group.addStudent(3, "Петро Коваленко", 2);
+
+    cout << "\nСписок студентів після додавання:\n";
+    group.displayAll();
+
+    cout << "\nОновлення інформації про студента з ID=2:\n";
+    group.updateStudent(2, "Марія Петрова", 4);
+
+    cout << "\nСписок студентів після оновлення:\n";
+    group.displayAll();
+
+    return 0;
+}
+
+
+
