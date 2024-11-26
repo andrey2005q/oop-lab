@@ -1,0 +1,68 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Team {
+private:
+    string name;
+    string city;
+    int year;
+    string coach;
+
+public:
+    Team() : name(""), city(""), year(0), coach("") {}
+
+    Team(string n, string c, int y, string co) : name(n), city(c), year(y), coach(co) {}
+
+    void input() {
+        cout << "Бетііс ";
+        getline(cin, name);
+        cout << "Львів: ";
+        getline(cin, city);
+        cout << "2024: ";
+        cin >> year;
+        cin.ignore();
+        cout << "Вася: ";
+        getline(cin, coach);
+    }
+
+    void display() const {
+        cout << "Команда: " << name << endl;
+        cout << "Місто: " << city << endl;
+        cout << "Рік заснування: " << year << endl;
+        cout << "Тренер: " << coach << endl;
+    }
+
+    void update(string n, string c, int y, string co) {
+        name = n;
+        city = c;
+        year = y;
+        coach = co;
+    }
+};
+
+int main() {
+    Team team1("Динамо", "Київ", 1927, "Мирча Луческу");
+    cout << "Інформація про команду 1:" << endl;
+    team1.display();
+
+    cout << endl;
+
+    Team team2;
+    cout << "Введіть інформацію про команду 2:" << endl;
+    team2.input();
+
+    cout << endl;
+
+    cout << "Інформація про команду 2:" << endl;
+    team2.display();
+
+    cout << endl;
+
+    team1.update("Шахтар", "Донецьк", 1936, "Ігор Йовічевіч");
+    cout << "Оновлена інформація про команду 1:" << endl;
+    team1.display();
+
+    return 0;
+}
+
