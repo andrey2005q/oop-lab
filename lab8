@@ -1,0 +1,168 @@
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+// Базовий клас "Упакування"
+class Packaging {
+private:
+    int id;
+    string type;
+
+public:
+    Packaging(int id = 0, string type = "Undefined") : id(id), type(type) {
+        cout << "Конструктор Packaging викликано." << endl;
+    }
+
+    virtual ~Packaging() {
+        cout << "Деструктор Packaging викликано." << endl;
+    }
+
+    int getId() const {
+        return id;
+    }
+
+    string getType() const {
+        return type;
+    }
+
+    void setId(int id) {
+        if (id < 0) {
+            cout << "Некоректний ID." << endl;
+            return;
+        }
+        this->id = id;
+    }
+
+    void setType(const string& type) {
+        if (type.empty()) {
+            cout << "Некоректний тип упакування." << endl;
+            return;
+        }
+        this->type = type;
+    }
+
+    virtual void displayInfo() const {
+        cout << "ID: " << id << ", Тип упакування: " << type << endl;
+    }
+};
+
+// Дочірній клас "Коробки"
+class Box : public Packaging {
+private:
+    double weight;
+    double volume;
+
+public:
+    Box(int id = 0, string type = "Box", double weight = 0.0, double volume = 0.0)
+        : Packaging(id, type), weight(weight), volume(volume) {
+        cout << "Конструктор Box викликано." << endl;
+    }
+
+    ~Box() {
+        cout << "Деструктор Box викликано." << endl;
+    }
+
+    double getWeight() const {
+        return weight;
+    }
+
+    double getVolume() const {
+        return volume;
+    }
+
+    void setWeight(double weight) {
+        if (weight < 0) {
+            cout << "Некоректна вага." << endl;
+            return;
+        }
+        this->weight = weight;
+    }
+
+    void setVolume(double volume) {
+        if (volume < 0) {
+            cout << "Некоректний об'єм." << endl;
+            return;
+        }
+        this->volume = volume;
+    }
+
+    void displayInfo() const override {
+        Packaging::displayInfo();
+        cout << "Вага: " << weight << " кг, Об'єм: " << volume << " м^3" << endl;
+    }
+};
+
+// Дочірній клас "Бочки"
+class Barrel : public Packaging {
+private:
+    double capacity;
+    string liquidType;
+
+public:
+    Barrel(int id = 0, string type = "Barrel", double capacity = 0.0, string liquidType = "Water")
+        : Packaging(id, type), capacity(capacity), liquidType(liquidType) {
+        cout << "Конструктор Barrel викликано." << endl;
+    }
+
+    ~Barrel() {
+        cout << "Деструктор Barrel викликано." << endl;
+    }
+
+    double getCapacity() const {
+        return capacity;
+    }
+
+    string getLiquidType() const {
+        return liquidType;
+    }
+
+    void setCapacity(double capacity) {
+        if (capacity < 0) {
+            cout << "Некоректна ємність." << endl;
+            return;
+        }
+        this->capacity = capacity;
+    }
+
+    void setLiquidType(const string& liquidType) {
+        if (liquidType.empty()) {
+            cout << "Некоректний тип рідини." << endl;
+            return;
+        }
+        this->liquidType = liquidType;
+    }
+
+    void displayInfo() const override {
+        Packaging::displayInfo();
+        cout << "Ємність: " << capacity << " л, Тип рідини: " << liquidType << endl;
+    }
+};
+
+int main() {
+    vector<Packaging*> packages;
+
+    // Додавання коробки
+    Box* box = new Box(1, "Box", 10.5, 0.3);
+    packages.push_back(box);
+
+    // Додавання бочки
+    Barrel* barrel = new Barrel(2, "Barrel", 200.0, "Oil");
+    packages.push_back(barrel);
+
+    // Виведення інформації про всі упаковки
+    cout << "\nСписок упаковок:\n";
+    for (const auto& package : packages) {
+        package->displayInfo();
+        cout << endl;
+    }
+
+    // Звільнення пам'яті
+    for (auto& package : packages) {
+        delete package;
+    }
+
+    return 0;
+}
+
