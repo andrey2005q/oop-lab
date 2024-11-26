@@ -1,0 +1,62 @@
+#include <iostream>
+#include <cmath> 
+using namespace std;
+
+struct CalculationData {
+    double a;       
+    double b;      
+    double x;       
+    double result;  
+};
+
+int checkConditions(double x) {
+    if (x > 0) return 1;  
+    else if (x == 0) return 2; 
+    else return 3;         
+}
+
+double calculatePositive(double a, double b, double x) {
+    return pow(a + x - b, 1.0 / 5.0) / (1.6 * pow(cos(3.2 * a * x), 3));
+}
+
+double calculateZero() {
+    return 1.0; 
+}
+
+double calculateNegative(double a, double b, double x) {
+    return pow(a - x + b, 2.0) + sin(x);
+}
+
+int main() {
+    CalculationData data;
+
+    cout << "Enter value for a: ";
+    cin >> data.a;
+    cout << "Enter value for b: ";
+    cin >> data.b;
+    cout << "Enter value for x: ";
+    cin >> data.x;
+
+    int condition = checkConditions(data.x);
+
+    switch (condition) {
+        case 1: 
+            data.result = calculatePositive(data.a, data.b, data.x);
+            break;
+        case 2: 
+            data.result = calculateZero();
+            break;
+        case 3: 
+            data.result = calculateNegative(data.a, data.b, data.x);
+            break;
+        default:
+            cout << "Invalid input!" << endl;
+            return 1;
+    }
+    cout << "The result is: " << data.result << endl;
+
+    return 0;
+
+
+
+
