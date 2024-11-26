@@ -1,0 +1,75 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <algorithm>
+
+class Circle {
+private:
+    double x;    // Координата x центру кола
+    double y;    // Координата y центру кола
+    double radius; // Радіус кола
+
+public:
+    Circle() : x(0), y(0), radius(1) {}
+
+    Circle(double x, double y, double r) : x(x), y(y), radius(r) {
+        if (r <= 0) {
+            throw std::invalid_argument("Радіус має бути більше 0!");
+        }
+    }
+
+    double area() const {
+        return M_PI * radius * radius;
+    }
+
+    bool operator<(const Circle& other) const {
+        return this->area() < other.area();
+    }
+
+    Circle operator-(const Circle& other) const {
+        double newX = this->x - other.x;
+        double newY = this->y - other.y;
+        double newRadius = std::fabs(this->radius - other.radius);
+        return Circle(newX, newY, newRadius);
+    }
+
+    void display() const {
+        std::cout << "Коло: Центр (" << x << ", " << y << "), Радіус: " << radius
+                  << ", Площа: " << area() << std::endl;
+    }
+};
+
+int main() {
+    try {
+        std::vector<Circle> circles = {
+            Circle(0, 0, 3),
+            Circle(1, 1, 2),
+            Circle(2, 2, 4),
+            Circle(3, 3, 1)
+        };
+
+        std::cout << "Початковий список кіл:" << std::endl;
+        for (const auto& circle : circles) {
+            circle.display();
+        }
+
+        std::sort(circles.begin(), circles.end());
+        std::cout << "\nВідсортований список кіл за площею:" << std::endl;
+        for (const auto& circle : circles) {
+            circle.display();
+        }
+
+        const Circle& smallest = circles.front();
+        const Circle& largest = circles.back();
+        Circle difference = largest - smallest;
+
+        std::cout << "\nРізниця між найбільшим і найменшим колом:" << std::endl;
+        difference.display();
+
+    } catch (const std::exception& e) {
+        std::cerr << "Помилка: " << e.what() << std::endl;
+    }
+
+    return 0;
+}
+
