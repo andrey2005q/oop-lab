@@ -1,0 +1,100 @@
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+// Базовий клас Product
+class Product {
+protected:
+    int id;
+    string name;
+    double price;
+
+public:
+    Product(int id = 0, string name = "Unnamed", double price = 0.0)
+        : id(id), name(name), price(price) {}
+
+    virtual ~Product() {}
+
+    virtual void display() const {
+        cout << "ID: " << id << ", Назва: " << name << ", Ціна: " << price << " грн\n";
+    }
+
+    friend class ProductManager; // Оголошення дружнього класу
+};
+
+// Дочірній клас PackagedProduct
+class PackagedProduct : public Product {
+private:
+    double weight;        // Вага упаковки
+    string packageType;   // Тип упаковки
+
+public:
+    PackagedProduct(int id = 0, string name = "Unnamed", double price = 0.0, double weight = 0.0, string packageType = "Unknown")
+        : Product(id, name, price), weight(weight), packageType(packageType) {}
+
+    ~PackagedProduct() {}
+
+    void display() const override {
+        Product::display();
+        cout << "Вага: " << weight << " кг, Тип упаковки: " << packageType << "\n";
+    }
+
+    friend class ProductManager; // Дружній клас
+};
+
+// Дружній клас ProductManager
+class ProductManager {
+private:
+    vector<Product*> products;
+
+public:
+    ProductManager() {}
+    ~ProductManager() {
+        for (auto product : products) {
+            delete product;
+        }
+    }
+
+    void addProduct(Product* product) {
+        products.push_back(product);
+    }
+
+    void displayAllProducts() const {
+        for (const auto& product : products) {
+            product->display();
+            cout << "\n";
+        }
+    }
+
+    void calculateTotalCost() const {
+        double total = 0.0;
+        for (const auto& product : products) {
+            total += product->price; // Доступ через дружній клас
+        }
+        cout << "Загальна вартість: " << total << " грн\n";
+    }
+};
+
+int main() {
+    ProductManager manager;
+
+    // Додавання товарів
+    Product* p1 = new Product(1, "Товар A", 100.0);
+    PackagedProduct* p2 = new PackagedProduct(2, "Товар B", 200.0, 5.0, "Картон");
+    PackagedProduct* p3 = new PackagedProduct(3, "Товар C", 150.0, 3.5, "Пластик");
+
+    manager.addProduct(p1);
+    manager.addProduct(p2);
+    manager.addProduct(p3);
+
+    // Виведення товарів
+    cout << "Список товарів:\n";
+    manager.displayAllProducts();
+
+    // Розрахунок загальної вартості
+    manager.calculateTotalCost();
+
+    return 0;
+}
