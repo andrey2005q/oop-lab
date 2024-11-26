@@ -1,0 +1,70 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <memory>
+
+// Base class: Packaging
+class Packaging {
+protected:
+    std::string description;
+
+public:
+    Packaging(std::string desc) : description(desc) {}
+    virtual ~Packaging() {}
+
+    virtual void displayInfo() const {
+        std::cout << "Packaging: " << description << "\n";
+    }
+};
+
+// Derived class: Box
+class Box : public Packaging {
+private:
+    int capacity;
+
+public:
+    Box(std::string desc, int cap) : Packaging(desc), capacity(cap) {}
+
+    void displayInfo() const override {
+        std::cout << "Box: " << description << ", Capacity: " << capacity << " items\n";
+    }
+};
+
+// Derived class: Barrel
+class Barrel : public Packaging {
+private:
+    double volume;
+
+public:
+    Barrel(std::string desc, double vol) : Packaging(desc), volume(vol) {}
+
+    void displayInfo() const override {
+        std::cout << "Barrel: " << description << ", Volume: " << volume << " liters\n";
+    }
+};
+
+// Friend class: PackagingManager
+class PackagingManager {
+public:
+    void displayAll(const std::vector<std::shared_ptr<Packaging>>& packagings) const {
+        for (const auto& packaging : packagings) {
+            packaging->displayInfo();
+        }
+    }
+};
+
+// Main function
+int main() {
+    // Create objects
+    std::vector<std::shared_ptr<Packaging>> packagings;
+    packagings.push_back(std::make_shared<Box>("Small Box", 50));
+    packagings.push_back(std::make_shared<Box>("Large Box", 200));
+    packagings.push_back(std::make_shared<Barrel>("Water Barrel", 100.5));
+    packagings.push_back(std::make_shared<Barrel>("Oil Barrel", 75.3));
+
+    // Display using PackagingManager
+    PackagingManager manager;
+    manager.displayAll(packagings);
+
+    return 0;
+}
